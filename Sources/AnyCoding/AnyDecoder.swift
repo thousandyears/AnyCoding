@@ -106,7 +106,6 @@ extension AnyDecoder {
 		public var errorDescription: String? { message }
 	}
 	
-	// swiftlint:disable line_length
 	func valueNotFound<T>(
 		_: T.Type,
 		at codingPath: [CodingKey]
