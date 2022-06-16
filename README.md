@@ -12,7 +12,7 @@ Encode concrete `T` into `Any`
 
 ## EmptyDecoder
 
-Decode an empty `T` from nothing
+Decode `T` from nothing
  
  ### Notes
  - `Any` refers to a tree-like structure using dictionary and array types
