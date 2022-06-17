@@ -5,12 +5,7 @@ enum OptionalSubscriptError: Error {
 }
 
 extension Optional where Wrapped == Any {
-	
-	subscript(first: AnyCodingKey, rest: AnyCodingKey...) -> Any? {
-		get { self[[first] + rest] }
-		set { self[[first] + rest] = newValue }
-	}
-	
+
 	subscript<C: Collection>(path: C) -> Any? where C.Element == CodingKey {
 		get { try? get(path, from: self) }
 		set { set(newValue, at: path, on: &self) }
@@ -18,12 +13,7 @@ extension Optional where Wrapped == Any {
 }
 
 extension Dictionary where Key == String, Value == Any {
-	
-	subscript(first: AnyCodingKey, rest: AnyCodingKey...) -> Any? {
-		get { self[[first] + rest] }
-		set { self[[first] + rest] = newValue }
-	}
-	
+
 	subscript<C: Collection>(path: C) -> Value? where C.Element == CodingKey {
 		get { try? get(path) }
 		set { set(newValue, at: path) }
@@ -48,12 +38,7 @@ extension Dictionary where Key == String, Value == Any {
 }
 
 extension Array where Element == Any {
-	
-	subscript(first: AnyCodingKey, rest: AnyCodingKey...) -> Any? {
-		get { self[[first] + rest] }
-		set { self[[first] + rest] = newValue }
-	}
-	
+
 	subscript<C: Collection>(path: C) -> Element? where C.Element == CodingKey {
 		get { try? get(path) }
 		set { set(newValue, at: path) }
@@ -100,8 +85,8 @@ private func get<T, C: Collection>(
 	from any: Any?,
 	as _: T.Type = T.self
 ) throws -> T? where C.Element == CodingKey {
-	let any: Any = try _get(path, from: any)
-	return try (any as? T).or(throw: OptionalSubscriptError.message("\(type(of: any)) is not \(T.self)"))
+	return try (_get(path, from: any) as? T)
+		.or(throw: OptionalSubscriptError.message("\(type(of: any)) is not \(T.self)"))
 }
 
 private func _get<C: Collection>(_ path: C, from any: Any?) throws -> Any where C.Element == CodingKey {
@@ -145,72 +130,5 @@ extension Collection {
 	fileprivate var headAndTail: (head: Element, tail: SubSequence)? {
 		guard let head = first else { return nil }
 		return (head, dropFirst())
-	}
-}
-
-extension String {
-	
-	fileprivate func splitDotPath() -> [String] {
-		isEmpty
-		? []
-		: split(separator: ".", omittingEmptySubsequences: true).map(String.init)
-	}
-}
-
-extension Collection where Element == String {
-	fileprivate var codingPath: [CodingKey] { map { AnyCodingKey($0) } }
-}
-
-extension Optional where Wrapped == Any {
-	
-	subscript(first: String, rest: String...) -> Any? {
-		get { self[[first] + rest] }
-		set { self[[first] + rest] = newValue }
-	}
-	
-	subscript(dotPath string: String) -> Any? {
-		get { self[string.splitDotPath()] }
-		set { self[string.splitDotPath()] = newValue }
-	}
-	
-	subscript<C: Collection>(_ collection: C) -> Any? where C.Element == String {
-		get { self[collection.codingPath] }
-		set { self[collection.codingPath] = newValue }
-	}
-}
-
-extension Dictionary where Key == String, Value == Any {
-	
-	subscript(first: String, rest: String...) -> Any? {
-		get { self[[first] + rest] }
-		set { self[[first] + rest] = newValue }
-	}
-	
-	subscript(dotPath string: String) -> Any? {
-		get { self[string.splitDotPath()] }
-		set { self[string.splitDotPath()] = newValue }
-	}
-	
-	subscript<C: Collection>(_ collection: C) -> Value? where C.Element == String {
-		get { self[collection.codingPath] }
-		set { self[collection.codingPath] = newValue }
-	}
-}
-
-extension Array where Element == Any {
-	
-	subscript(first: String, rest: String...) -> Any? {
-		get { self[[first] + rest] }
-		set { self[[first] + rest] = newValue }
-	}
-	
-	subscript(dotPath string: String) -> Any? {
-		get { self[string.splitDotPath()] }
-		set { self[string.splitDotPath()] = newValue }
-	}
-	
-	subscript<C: Collection>(_ collection: C) -> Element? where C.Element == String {
-		get { self[collection.codingPath] }
-		set { self[collection.codingPath] = newValue }
 	}
 }
