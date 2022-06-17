@@ -40,6 +40,10 @@ public struct EmptyDecoder: Decoder {
 	public let codingPath: [CodingKey] = [ ]
 	public let userInfo: [CodingUserInfoKey: Any] = [:]
 
+	public func decode<T>(_: T.Type = T.self) throws -> T where T: Decodable {
+		try T.empty()
+	}
+
 	public func container<Key: CodingKey>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> { .init(Keyed<Key>()) }
 	public func unkeyedContainer() throws -> UnkeyedDecodingContainer { Unkeyed() }
 	public func singleValueContainer() throws -> SingleValueDecodingContainer { SingleValue() }
