@@ -1,4 +1,4 @@
-public func isEqual(_ x: Any, _ y: Any) -> Bool {
+func isEqual(_ x: Any, _ y: Any) -> Bool {
   if let isEqual = (x as? any Equatable)?.isEqual(to: y) {
     return isEqual
   } else if let equatable = x as? AnyEquatable {

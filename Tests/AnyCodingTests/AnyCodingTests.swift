@@ -93,7 +93,7 @@ final class AnyCodingTests: XCTestCase {
 		assertCoding(["1": value, "2": value])
 	}
 
-	func assertCoding<T: Codable & Equatable>(_ value: T, _ file: StaticString = #file, _ line: UInt = #line) {
+	func assertCoding<T: Codable & Equatable>(_ value: T, _ file: StaticString = #filePath, _ line: UInt = #line) {
 		do {
 			let encoded = try XCTUnwrap(AnyEncoder().encode(value), file: file, line: line)
 			let decoded = try AnyDecoder().decode(T.self, from: encoded)

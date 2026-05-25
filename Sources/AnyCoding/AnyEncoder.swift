@@ -1,4 +1,6 @@
+#if canImport(Combine)
 import Combine
+#endif
 import Foundation
 
 public protocol AnyEncoderProtocol: AnyObject, Encoder {
@@ -12,7 +14,7 @@ public protocol AnyEncoderProtocol: AnyObject, Encoder {
   func encode<T>(_ this: T) throws -> Any? where T: Encodable
 }
 
-open class AnyEncoder: AnyEncoderProtocol, TopLevelEncoder {
+open class AnyEncoder: AnyEncoderProtocol {
   
   public var codingPath: [CodingKey] = []
   public var userInfo: [CodingUserInfoKey: Any] = [:]
@@ -54,6 +56,10 @@ open class AnyEncoder: AnyEncoderProtocol, TopLevelEncoder {
     }
   }
 }
+
+#if canImport(Combine)
+extension AnyEncoder: TopLevelEncoder {}
+#endif
 
 extension AnyEncoder {
   
