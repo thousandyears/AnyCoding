@@ -29,9 +29,7 @@ AnyCoding is for the in-memory case:
 - convert parts of a payload without decoding the whole value up front.
 - add domain-specific conversions by subclassing `AnyDecoder` and overriding `convert`.
 
-Swift Compute uses this shape for its `_JSON` package: typed values can be encoded into a JSON value through `AnyEncoder`, and JSON values can be decoded back into models through `AnyDecoder`, without first round-tripping through `Data`.
-
-BlockchainNamespace uses the same extension point for domain decoding. Its custom decoder converts strings, tags and references into domain types while still falling back to the standard AnyCoding conversions for ordinary JSON-shaped values.
+swift-compute uses this shape for its `_JSON` package: typed values can be encoded into a JSON value through `AnyEncoder`, and JSON values can be decoded back into models through `AnyDecoder`, without first round-tripping through `Data`.
 
 ## What It Provides
 
