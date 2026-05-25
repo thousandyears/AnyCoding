@@ -1,5 +1,9 @@
+#if canImport(Combine)
 import Combine
+#endif
+#if canImport(CoreGraphics)
 import CoreGraphics
+#endif
 import Foundation
 
 public protocol AnyDecoderProtocol: AnyObject, Decoder {
@@ -22,7 +26,7 @@ extension AnyDecoderProtocol {
   }
 }
 
-open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
+open class AnyDecoder: AnyDecoderProtocol {
 
   public var codingPath: [CodingKey] = []
   public var userInfo: [CodingUserInfoKey: Any] = [:]
@@ -82,8 +86,10 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
       return number.floatValue
     case (let number as NSNumber, is Double.Type):
       return number.doubleValue
+    #if canImport(CoreGraphics)
     case (let number as NSNumber, is CGFloat.Type):
-      return number.doubleValue
+      return CGFloat(number.doubleValue)
+    #endif
     case (let boolean as Bool, is String.Type):
       return boolean.description
     case (let string as String, is Int.Type):
@@ -104,6 +110,10 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
     }
   }
 }
+
+#if canImport(Combine)
+extension AnyDecoder: TopLevelDecoder {}
+#endif
 
 extension AnyDecoder {
 
